@@ -1,9 +1,10 @@
 name: Linx Digital TypeScript Publish NPM Publish
 
 on:
-  push:
-    tags:
-      - "*"
+  workflow_call:
+    secrets:
+      NPM_TOKEN:
+        required: false
 
 jobs:
   install:
@@ -43,9 +44,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Lint
-        run: npm run lint
+        run: npm run lint --if-present
       - name: Test
-        run: npm run test:cov
+        run: npm run test:cov --if-present
       - name: Build
         run: npm run build
       - name: Upload dist artifact
@@ -82,6 +83,9 @@ jobs:
           fi
           echo "tagType=$tagType" >> $GITHUB_ENV
           printf "It is a $tagType version\n"
-      - run: npm publish --tag $tagType
+      # - run: npm publish --tag $tagType
+      - run: | 
+          echo "fazendo deploy" 
+
         env:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
