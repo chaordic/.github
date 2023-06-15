@@ -2,7 +2,7 @@ name: NPM Build and Publish
 
 on:
   push:
-    branches: ['main']
+    branches: [ $default-branch ]
   
   workflow_dispatch:
     inputs:
