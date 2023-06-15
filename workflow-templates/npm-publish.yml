@@ -13,5 +13,6 @@ on:
 
 jobs:
   lint-build-deploy:
-    uses: chaordic/github-workflows-templates/.github/workflows/typescript-npm-publish.yml@main
-    secrets: inherit
+    - uses: actions/checkout@v3
+    - name: Run a one-line script
+      run: echo Hello from Octo Organization
