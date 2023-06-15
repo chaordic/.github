@@ -1,9 +1,8 @@
 {
     "name": "Linx Digital Performance NPM Build and Publish for Libs",
     "description": "Linx Digital Performance NPM Build and Publish for Libs CI starter workflow.",
-    "iconName": "example-icon",
     "categories": [
-        "Typescript"
+        "npm"
     ],
     "filePatterns": [
         "package.json$",
