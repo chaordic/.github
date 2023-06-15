@@ -1,5 +1,4 @@
 {
-    "name": "Linx Digital Performance NPM Build and Publish for Libs",
-    "description": "Linx Digital Performance NPM Build and Publish for Libs CI starter workflow.",
-    "icon": "cog"
+    "name": "Linx Digital NPM Publish",
+    "description": "Linx Digital Performance NPM Build and Publish for Libs CI starter workflow."
 }
