@@ -3,10 +3,5 @@
     "description": "Linx Digital Performance NPM Build and Publish for Libs CI starter workflow.",
     "categories": [
         "npm"
-    ],
-    "filePatterns": [
-        "package.json$",
-        "tsconfig.json$",
-        ".*\\.md$"
     ]
 }
