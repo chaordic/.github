@@ -1,0 +1,13 @@
+{
+    "name": "Linx Digital Typescript ECR Publish",
+    "description": "Linx Digital Performance ECR Build and k8s Publish for Typescript projects.",
+    "categories": [
+        "continuous-integration",
+        "ECR Publish"
+    ],
+    "filePatterns": [
+        "package.json$",
+        "^Dockerfile",
+        ".*\\.md$"
+    ]
+}

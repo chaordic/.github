@@ -1,15 +1,18 @@
-name: Linx Digital NPM Publish
+name: Linx Digital Typescript S3 Cloud Front Publish
 
 on:
   push:
-    branches: [ $default-branch ]
-  
+    tags:
+      - "[0-9]+.[0-9]+.[0-9]+-rc.*"
+      - "v[0-9]+.[0-9]+.[0-9]+-rc.*"
+    
   workflow_dispatch:
     inputs:
       input:
-        description: "Run workflow manually"
-        required: false
-        default: "run"
+         description: "Run workflow manually"
+         required: false
+         default: "run"
+
 
 jobs:
   # Job to fill CUSTOM_ENV_VARS with desired values, you can use it to pass some secrets as a parameter to
@@ -30,22 +33,27 @@ jobs:
   #         CUSTOM_ENV_VARS=$(echo "{\"NAME\":\"CUSTOM_ENV_VARS\",\"VUE_APP_STATIC_PATH\": \"${VUE_APP_STATIC_PATH}\", \"VUE_APP_API_BASE_URL\": \"${STG_VUE_APP_API_BASE_URL}\"}"| base64 -w0)
   #         echo "CUSTOM_ENV_VARS=$CUSTOM_ENV_VARS" >> $GITHUB_OUTPUT;
 
-  lint-build-deploy:
-    uses: chaordic/github-workflows-templates/.github/workflows/typescript-npm-publish.yml@main
+  S3-CF-deploy:
+    uses: chaordic/github-workflows-templates/.github/workflows/typescript-s3-deploy.yml@main
+    needs: Build-Custom-Env-Vars
     secrets:
-      NPM_TOKEN: <NPM Token to access private NPM repository>
-      PUSH_TOKEN: <Github Tonken to make Push on repositories when it need an special permission>
-      SLACK_WEBHOOK: <Slack Webhook configuration>
+      AWS_ACCESS_KEY_ID: <your AWS Access Key id>
+      AWS_SECRET_ACCESS_KEY: <your AWS Access Key id>
+      AWS_CF_DISTRIBUTION_ID: <Your project Cloud Front Distribution ID>
       # The CUSTOM_ENV_VARS on inputs has preference over CUSTOM_ENV_VARS on secrets
       CUSTOM_ENV_VARS: "<JSON Object encoded on base64 with custom environment variables, The FirstKey must be \"NAME\":\"CUSTOM_ENV_VARS\", eg: {\"NAME\":\"CUSTOM_ENV_VARS\",\"VUE_APP_STATIC_PATH\":\"/path/to/locale/\",\"VUE_APP_API_BASE_URL\":\"/baseulr.com.br/\"}>"
+      NPM_TOKEN: <NPM Token to access private NPM repository>
+      SLACK_WEBHOOK: <Slack Webhook configuration>
+      
     with:
-      SLACK_NOTIFICATION_ENABLED: <true|false>
-      CUSTOM_TEST_COMMAND: <Custom command to call project tests>
+      AWS_REGION: "us-east-1"
+      AWS_S3_BUCKET: <your S3 bucket name>
       # The CUSTOM_ENV_VARS on inputs has preference over CUSTOM_ENV_VARS on secrets
       # you can use the value ${{needs.Build-Custom-Env-Vars.outputs.CUSTOM_ENV_VARS}} if you mount
       # this value on this workflow
       #
       # eg: CUSTOM_ENV_VARS: ${{needs.Build-Custom-Env-Vars.outputs.CUSTOM_ENV_VARS}}
       CUSTOM_ENV_VARS: "<JSON Object encoded on base64 with custom environment variables, The FirstKey must be \"NAME\":\"CUSTOM_ENV_VARS\", eg: {\"NAME\":\"CUSTOM_ENV_VARS\",\"VUE_APP_STATIC_PATH\":\"/path/to/locale/\",\"VUE_APP_API_BASE_URL\":\"/baseulr.com.br/\"}>"
+      CUSTOM_TEST_COMMAND: <Custom command to call project tests>
       MATRIX_NODE_VERSION: "<An String with JSON Array with Matrix Node version, eg: \"[\"18.x\",\"14.x\"]\", default: \"[\"18.x\"]\">"
-
+      SLACK_NOTIFICATION_ENABLED: "true"

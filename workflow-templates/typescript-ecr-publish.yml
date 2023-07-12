@@ -1,15 +1,24 @@
-name: Linx Digital NPM Publish
+name: Linx Digital Typescript ECR Publish
 
 on:
   push:
     branches: [ $default-branch ]
+    tags:
+      - <define tags here>
+    #For staging eg:
+    #  - "[0-9]+.[0-9]+.[0-9]+-rc.*"
+    #  - "v[0-9]+.[0-9]+.[0-9]+-rc.*"
+    #For Production eg:
+    #  - "[0-9]+.[0-9]+.[0-9]+"
+    #  - "v[0-9]+.[0-9]+.[0-9]+"
+
   
   workflow_dispatch:
     inputs:
-      input:
-        description: "Run workflow manually"
+      SOURCE_TAG:
+        description: "Tag to build image"
         required: false
-        default: "run"
+
 
 jobs:
   # Job to fill CUSTOM_ENV_VARS with desired values, you can use it to pass some secrets as a parameter to
@@ -30,22 +39,30 @@ jobs:
   #         CUSTOM_ENV_VARS=$(echo "{\"NAME\":\"CUSTOM_ENV_VARS\",\"VUE_APP_STATIC_PATH\": \"${VUE_APP_STATIC_PATH}\", \"VUE_APP_API_BASE_URL\": \"${STG_VUE_APP_API_BASE_URL}\"}"| base64 -w0)
   #         echo "CUSTOM_ENV_VARS=$CUSTOM_ENV_VARS" >> $GITHUB_OUTPUT;
 
-  lint-build-deploy:
-    uses: chaordic/github-workflows-templates/.github/workflows/typescript-npm-publish.yml@main
+  ECR-Push-K8S-Deploy:
+    uses: chaordic/github-workflows-templates/.github/workflows/typescript-ecr-k8s-deploy.yml@main
     secrets:
-      NPM_TOKEN: <NPM Token to access private NPM repository>
-      PUSH_TOKEN: <Github Tonken to make Push on repositories when it need an special permission>
-      SLACK_WEBHOOK: <Slack Webhook configuration>
+      AWS_ACCESS_KEY_ID: <your AWS Access Key id>
+      AWS_SECRET_ACCESS_KEY: <your AWS Access Key id>
       # The CUSTOM_ENV_VARS on inputs has preference over CUSTOM_ENV_VARS on secrets
       CUSTOM_ENV_VARS: "<JSON Object encoded on base64 with custom environment variables, The FirstKey must be \"NAME\":\"CUSTOM_ENV_VARS\", eg: {\"NAME\":\"CUSTOM_ENV_VARS\",\"VUE_APP_STATIC_PATH\":\"/path/to/locale/\",\"VUE_APP_API_BASE_URL\":\"/baseulr.com.br/\"}>"
+      DEPLOYMENT_TOKEN: <Github Tonken to make Push on deployment repository>
+      SLACK_WEBHOOK: <Slack Webhook configuration>
     with:
-      SLACK_NOTIFICATION_ENABLED: <true|false>
+      AWS_REGION: "us-east-1"
       CUSTOM_TEST_COMMAND: <Custom command to call project tests>
       # The CUSTOM_ENV_VARS on inputs has preference over CUSTOM_ENV_VARS on secrets
       # you can use the value ${{needs.Build-Custom-Env-Vars.outputs.CUSTOM_ENV_VARS}} if you mount
       # this value on this workflow
       #
       # eg: CUSTOM_ENV_VARS: ${{needs.Build-Custom-Env-Vars.outputs.CUSTOM_ENV_VARS}}
-      CUSTOM_ENV_VARS: "<JSON Object encoded on base64 with custom environment variables, The FirstKey must be \"NAME\":\"CUSTOM_ENV_VARS\", eg: {\"NAME\":\"CUSTOM_ENV_VARS\",\"VUE_APP_STATIC_PATH\":\"/path/to/locale/\",\"VUE_APP_API_BASE_URL\":\"/baseulr.com.br/\"}>"
+      CUSTOM_ENV_VARS: "<JSON Object encoded on base64 with custom environment variables, The FirstKey must be \"NAME\":\"CUSTOM_ENV_VARS\", eg: {\"NAME\":\"CUSTOM_ENV_VARS\",\"VUE_APP_STATIC_PATH\":\"/path/to/locale/\",\"VUE_APP_API_BASE_URL\":\"/baseulr.com.br/\"}>" 
+      ECR_REPOSITORY: "<your ecr repository here ex: catalog/catalog-write>"
+      K8S_DEPLOYMENT_REPOSITORY: "<your k8s deployment repository path here, ex: chaordic/catalog-kubernetes-apps >"
+      K8S_DEPLOYMENT_REPOSITORY_REF: "<k8s repository reference branch ex: main>"
+      K8S_CLUSTER: "<your k8s cluster ex: catalog-eks-stage >"
+      K8S_NAMESPACE: "<your k8s app namespace ex: catalog>"
+      K8S_APP_NAME: "<your k8s app name ex: catalog-write>"
       MATRIX_NODE_VERSION: "<An String with JSON Array with Matrix Node version, eg: \"[\"18.x\",\"14.x\"]\", default: \"[\"18.x\"]\">"
-
+      SOURCE_TAG: ${{inputs.SOURCE_TAG || <your tag here> }} "leave empty to job infer the source tag on push tag event"
+      SLACK_NOTIFICATION_ENABLED: "false"

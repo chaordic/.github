@@ -1,0 +1,13 @@
+{
+    "name": "Linx Digital Typescript S3 CF Publish",
+    "description": "Linx Digital Performance Build and S3, Cloud Front Publish for Typescript projects.",
+    "categories": [
+        "continuous-integration",
+        "S3 Publish",
+        "CF Publish"
+    ],
+    "filePatterns": [
+        "package.json$",
+        ".*\\.md$"
+    ]
+}
