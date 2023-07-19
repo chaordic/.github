@@ -39,6 +39,7 @@ jobs:
     secrets:
       AWS_ACCESS_KEY_ID: <your AWS Access Key id>
       AWS_SECRET_ACCESS_KEY: <your AWS Access Key id>
+      # AWS_CF_DISTRIBUTION_ID if not provided the invalidation step will be skipped
       AWS_CF_DISTRIBUTION_ID: <Your project Cloud Front Distribution ID>
       # The CUSTOM_ENV_VARS on inputs has preference over CUSTOM_ENV_VARS on secrets
       CUSTOM_ENV_VARS: "<JSON Object encoded on base64 with custom environment variables, The FirstKey must be \"NAME\":\"CUSTOM_ENV_VARS\", eg: {\"NAME\":\"CUSTOM_ENV_VARS\",\"VUE_APP_STATIC_PATH\":\"/path/to/locale/\",\"VUE_APP_API_BASE_URL\":\"/baseulr.com.br/\"}>"
@@ -48,6 +49,10 @@ jobs:
     with:
       AWS_REGION: "us-east-1"
       AWS_S3_BUCKET: <your S3 bucket name>
+      CF_PATHS: "<paths to invalidate cache, separated by space, eg: '/foo /bar /*'>"
+      # DEST_DIR default value / root of bucket
+      DEST_DIR: <S3 directory destination>
+
       # The CUSTOM_ENV_VARS on inputs has preference over CUSTOM_ENV_VARS on secrets
       # you can use the value ${{needs.Build-Custom-Env-Vars.outputs.CUSTOM_ENV_VARS}} if you mount
       # this value on this workflow
@@ -55,5 +60,12 @@ jobs:
       # eg: CUSTOM_ENV_VARS: ${{needs.Build-Custom-Env-Vars.outputs.CUSTOM_ENV_VARS}}
       CUSTOM_ENV_VARS: "<JSON Object encoded on base64 with custom environment variables, The FirstKey must be \"NAME\":\"CUSTOM_ENV_VARS\", eg: {\"NAME\":\"CUSTOM_ENV_VARS\",\"VUE_APP_STATIC_PATH\":\"/path/to/locale/\",\"VUE_APP_API_BASE_URL\":\"/baseulr.com.br/\"}>"
       CUSTOM_TEST_COMMAND: <Custom command to call project tests>
+      CUSTOM_INSTALL_COMMAND: <Custom command to install project dependencies>
+      # MATRIX_NODE_VERSION: Default value ["18.x"]
       MATRIX_NODE_VERSION: "<An String with JSON Array with Matrix Node version, eg: \"[\"18.x\",\"14.x\"]\", default: \"[\"18.x\"]\">"
+      # S3_CUSTOM_ARGS: default value --follow-symlinks
+      S3_CUSTOM_ARGS: "arguments to run aws s3 cli command"
+      # SOURCE_DIR: default value dist
+      SOURCE_DIR: <path to source directory to upload file to S3>
+      # SLACK_NOTIFICATION_ENABLED: default value "false"
       SLACK_NOTIFICATION_ENABLED: "true"
