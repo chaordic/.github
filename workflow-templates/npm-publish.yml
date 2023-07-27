@@ -39,7 +39,10 @@ jobs:
       # The CUSTOM_ENV_VARS on inputs has preference over CUSTOM_ENV_VARS on secrets
       CUSTOM_ENV_VARS: "<JSON Object encoded on base64 with custom environment variables, The FirstKey must be \"NAME\":\"CUSTOM_ENV_VARS\", eg: {\"NAME\":\"CUSTOM_ENV_VARS\",\"VUE_APP_STATIC_PATH\":\"/path/to/locale/\",\"VUE_APP_API_BASE_URL\":\"/baseulr.com.br/\"}>"
     with:
-      SLACK_NOTIFICATION_ENABLED: <true|false>
+      ARTIFACT_DIR: dist
+      CUSTOM_BUILD_COMMAND: <custom command to run build, not required>
+      CUSTOM_INSTALL_COMMAND: <Custom command to install project dependencies, not required>
+      CUSTOM_LINT_COMMAND: <Custom command to run lint, not required>
       CUSTOM_TEST_COMMAND: <Custom command to call project tests>
       # The CUSTOM_ENV_VARS on inputs has preference over CUSTOM_ENV_VARS on secrets
       # you can use the value ${{needs.Build-Custom-Env-Vars.outputs.CUSTOM_ENV_VARS}} if you mount
@@ -48,4 +51,5 @@ jobs:
       # eg: CUSTOM_ENV_VARS: ${{needs.Build-Custom-Env-Vars.outputs.CUSTOM_ENV_VARS}}
       CUSTOM_ENV_VARS: "<JSON Object encoded on base64 with custom environment variables, The FirstKey must be \"NAME\":\"CUSTOM_ENV_VARS\", eg: {\"NAME\":\"CUSTOM_ENV_VARS\",\"VUE_APP_STATIC_PATH\":\"/path/to/locale/\",\"VUE_APP_API_BASE_URL\":\"/baseulr.com.br/\"}>"
       MATRIX_NODE_VERSION: "<An String with JSON Array with Matrix Node version, eg: \"[\"18.x\",\"14.x\"]\", default: \"[\"18.x\"]\">"
+      SLACK_NOTIFICATION_ENABLED: <true|false>
 

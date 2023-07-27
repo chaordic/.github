@@ -57,6 +57,7 @@ jobs:
       #
       # eg: CUSTOM_ENV_VARS: ${{needs.Build-Custom-Env-Vars.outputs.CUSTOM_ENV_VARS}}
       CUSTOM_ENV_VARS: "<JSON Object encoded on base64 with custom environment variables, The FirstKey must be \"NAME\":\"CUSTOM_ENV_VARS\", eg: {\"NAME\":\"CUSTOM_ENV_VARS\",\"VUE_APP_STATIC_PATH\":\"/path/to/locale/\",\"VUE_APP_API_BASE_URL\":\"/baseulr.com.br/\"}>" 
+      CUSTOM_LINT_COMMAND: <Custom command to run lint, not required>
       ECR_REPOSITORY: "<your ecr repository here ex: catalog/catalog-write>"
       K8S_DEPLOYMENT_REPOSITORY: "<your k8s deployment repository path here, ex: chaordic/catalog-kubernetes-apps >"
       K8S_DEPLOYMENT_REPOSITORY_REF: "<k8s repository reference branch ex: main>"
