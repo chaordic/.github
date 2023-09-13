@@ -1,4 +1,4 @@
-name: Linx Digital NPM Publish
+name: Linx Digital NPM Lint, Build and Test
 
 on:
   push:
@@ -30,11 +30,10 @@ jobs:
   #         CUSTOM_ENV_VARS=$(echo "{\"NAME\":\"CUSTOM_ENV_VARS\",\"VUE_APP_STATIC_PATH\": \"${VUE_APP_STATIC_PATH}\", \"VUE_APP_API_BASE_URL\": \"${STG_VUE_APP_API_BASE_URL}\"}"| base64 -w0)
   #         echo "CUSTOM_ENV_VARS=$CUSTOM_ENV_VARS" >> $GITHUB_OUTPUT;
 
-  NPM-Publish:
-    uses: chaordic/github-workflows-templates/.github/workflows/typescript-npm-publish.yml@main
+  Lint-Build-Test:
+    uses: chaordic/github-workflows-templates/.github/workflows/typescript-lint-build-test.yml@main
     secrets:
       NPM_TOKEN: <NPM Token to access private NPM repository>
-      PUSH_TOKEN: <Github Tonken to make Push on repositories when it need an special permission>
       SLACK_WEBHOOK: <Slack Webhook configuration>
       # The CUSTOM_ENV_VARS on inputs has preference over CUSTOM_ENV_VARS on secrets
       CUSTOM_ENV_VARS: "<JSON Object encoded on base64 with custom environment variables, The FirstKey must be \"NAME\":\"CUSTOM_ENV_VARS\", eg: {\"NAME\":\"CUSTOM_ENV_VARS\",\"VUE_APP_STATIC_PATH\":\"/path/to/locale/\",\"VUE_APP_API_BASE_URL\":\"/baseulr.com.br/\"}>"

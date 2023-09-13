@@ -1,0 +1,12 @@
+{
+    "name": "Linx Digital NPM Lint, Build and Test",
+    "description": "Linx Digital Performance NPM Lint, Build and Test for Libs CI starter workflow.",
+    "categories": [
+        "continuous-integration",
+        "NPM Publish"
+    ],
+    "filePatterns": [
+        "package.json$",
+        ".*\\.md$"
+    ]
+}
