@@ -40,6 +40,7 @@ jobs:
       CUSTOM_ENV_VARS: "<JSON Object encoded on base64 with custom environment variables, The FirstKey must be \"NAME\":\"CUSTOM_ENV_VARS\", eg: {\"NAME\":\"CUSTOM_ENV_VARS\",\"VUE_APP_STATIC_PATH\":\"/path/to/locale/\",\"VUE_APP_API_BASE_URL\":\"/baseulr.com.br/\"}>"
     with:
       ARTIFACT_DIR: dist
+      AUTO_VERSION_BUMP: <true or false, it enable the ability to bump versions on merge with main>
       CUSTOM_BUILD_COMMAND: <custom command to run build, not required>
       CUSTOM_INSTALL_COMMAND: <Custom command to install project dependencies, not required>
       CUSTOM_LINT_COMMAND: <Custom command to run lint, not required>
